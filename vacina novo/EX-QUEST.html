@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Questionário de Múltipla Escolha sobre o Texto</title>
+</head>
+<body>
+
+  <h1>Questionário de Múltipla Escolha sobre o Texto</h1>
+
+  <form id="quizForm">
+    <script>
+      // Array de perguntas e opções de resposta
+      const questions = [
+        {
+          question: "Qual é o agente causador da Varíola?",
+          options: ["A) Um vírus", "B) Uma bactéria", "C) Um protozoário"],
+          answer: "A"
+        },
+        {
+          question: "A Varíola foi erradicada por meio....",
+          options: ["A) Retirada de àgua parada", "B) Desinfecção da mãos", "C) Vacinação"],
+          answer: "C"
+        },
+        {
+          question: "Quais dos sintomas a seguir são classificados como sintomas de Varíola:",
+          options: ["A) Febre, Fadiga, Calafrios, Dor de cabeça", "B) Tosse, Secreção, Febre ", "C) Manchas avermelhadas, Coceira, Dor de cabeça "],
+          answer: "A"
+        },
+        {
+          question: "Como era o tratamento da Varíola?",
+          options: ["A) Cirurgia", "B) Medicamentos que amenizavam os sintomas", "C) Não havia tratamento"],
+          answer: "B"
+        },
+        {
+          question: "Quando foi registrado o primeiro caso de Varíola?",
+          options: ["A) 2000", "B) 1950 ", "C) 1970"],
+          answer: "C"
+        }
+      ];
+
+      // Função para processar o questionário e exibir resultados
+      function processQuiz() {
+        const form = document.getElementById("quizForm");
+        let score = 0;
+
+        // Gabarito e respostas do usuário
+        const correctAnswers = questions.map(q => q.answer);
+        const userAnswers = Array.from(form.elements).filter(e => e.type === 'radio' && e.checked).map(e => e.value);
+
+        // Comparar respostas com o gabarito
+        userAnswers.forEach((answer, index) => {
+          if (answer === correctAnswers[index]) {
+            score++;
+          }
+        });
+
+        // Exibir gabarito e score
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `<p>Gabarito:</p>`;
+        for (let i = 0; i < questions.length; i++) {
+          resultDiv.innerHTML += `<p>${questions[i].question} - Resposta correta: ${questions[i].answer}</p>`;
+        }
+        resultDiv.innerHTML += `<p>Score: ${score} de ${questions.length}</p>`;
+      }
+
+      // Iniciar o questionário
+      function startQuiz() {
+        const form = document.getElementById("quizForm");
+
+        for (let i = 0; i < questions.length; i++) {
+          const questionDiv = document.createElement("div");
+
+          questionDiv.innerHTML = `<p>${questions[i].question}</p>`;
+          for (let j = 0; j < questions[i].options.length; j++) {
+            const optionLabel = document.createElement("label");
+            const optionRadio = document.createElement("input");
+
+            optionRadio.type = "radio";
+            optionRadio.name = `question${i}`;
+            optionRadio.value = String.fromCharCode(65 + j); // A, B, C, ...
+
+            optionLabel.textContent = questions[i].options[j];
+            optionLabel.htmlFor = `question${i}${String.fromCharCode(65 + j)}`;
+
+            questionDiv.appendChild(optionRadio);
+            questionDiv.appendChild(optionLabel);
+            questionDiv.appendChild(document.createElement("br"));
+          }
+
+          form.appendChild(questionDiv);
+        }
+
+        const submitButton = document.createElement("button");
+        submitButton.type = "button";
+        submitButton.textContent = "Verificar Respostas";
+        submitButton.onclick = processQuiz;
+
+        form.appendChild(submitButton);
+
+        // Container para exibir o resultado
+        const resultDiv = document.createElement("div");
+        resultDiv.id = "result";
+        form.appendChild(resultDiv);
+      }
+
+      // Iniciar o questionário quando a página é carregada
+      window.onload = startQuiz;
+    </script>
+  </form>
+
+</body>
+</html>
